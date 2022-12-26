@@ -22,7 +22,7 @@ const Button = styled.div`
   }
 
 `
-const Resolved = ({data,name}) => {
+const Resolved = ({data,name,updateNot}) => {
   const [loading,setLoading] = useState(false)
   useEffect(()=>{
     setLoading(false)
@@ -33,6 +33,7 @@ const Resolved = ({data,name}) => {
         setLoading(true)
         solveNotification(data.anydesk,name,(rt)=>{
           data.pending = rt ? 0 : data.pending
+          updateNot()
           setLoading(false)
         })
       }}>{data.pending == 0 ? "Ok" : loading ? "Checking" : "Solve"}</Button>

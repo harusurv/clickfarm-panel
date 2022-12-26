@@ -115,7 +115,7 @@ const Main = () => {
       <Column label="Email" style={{color:"#cccccc"}} dataKey="email" width={(width - 570)} />
       <Column label="Pending" style={{color:"#cccccc"}} width={120} dataKey="pending" cellRenderer={({ cellData, rowIndex }) => <Status data={cellData.pending} />} cellDataGetter={({ rowData }) => rowData} />
       <Column label="Date" style={{color:"#cccccc"}} width={220} dataKey="date" cellRenderer={({ cellData, rowIndex }) => new Date(cellData).toLocaleString()} />
-      <Column label="Solved" style={{color:"#cccccc"}} width={110} cellRenderer={({ cellData, rowIndex }) => <Resolved data={cellData} name={name} />} cellDataGetter={({ rowData }) => rowData} />
+      <Column label="Solved" style={{color:"#cccccc"}} width={110} cellRenderer={({ cellData, rowIndex }) => <Resolved updateNot={()=>getListNotifications(sortList)} data={cellData} name={name} />} cellDataGetter={({ rowData }) => rowData} />
     </StyledTable>
   )}
           </AutoSizer>
