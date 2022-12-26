@@ -12,6 +12,17 @@ export const getListNotifications = (fallback) => {
 
   })
 }
+export const getResueltos = (agent,fallback) => {
+  axios.get(ENDPOINT+"/v1/solved?agent="+agent.toLowerCase())
+  .then((body)=>{
+    fallback(body?.data?.data)
+  }).catch((e)=>{
+    console.log(e)
+    fallback([])
+
+  })
+}
+
 export const solveNotification = (anydesk,agent,fallback) => {
   const token = crypto.createHash('sha256').update(anydesk+MAGIC_COOKIE+agent).digest('base64');
   console.log(anydesk)

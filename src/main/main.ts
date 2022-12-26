@@ -18,7 +18,21 @@ class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.autoDownload = true;
+    var ts = this
+    ts.isUpdating = false
+    autoUpdater.on('update-available',()=>{
+      ts.isUpdating = true
+    })
+    autoUpdater.on('update-downloaded',()=>{
+      autoUpdater.quitAndInstall()
+    })
+    autoUpdater.checkForUpdates();
+    setInterval(()=>{
+      if(!ts.isUpdating)
+        autoUpdater.checkForUpdates();
+    },60000)
+
   }
 }
 
