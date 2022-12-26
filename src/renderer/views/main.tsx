@@ -75,7 +75,8 @@ const Main = () => {
     return () => clearInterval(notifications)
   },[])
   useEffect(()=>{
-    getResueltos(name,setResueltos)
+    if(name && name.length > 0)
+      getResueltos(name,setResueltos)
     clearInterval(refTimeout.current)
     refTimeout.current = setInterval(()=>{
       if(name && name.length > 0)
