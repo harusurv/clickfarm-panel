@@ -50,7 +50,7 @@ const Main = () => {
   const [listNofications,setListNotifications] = useState([])
   const [name,setName] = useState(localStorage.getItem('name') ?? '')
   const [resueltos,setResueltos] = useState("-")
-
+  const refTimeout = useRef()
   const refInput = useRef()
   const sortList = (list) => {
     list.sort((a,b)=>{
@@ -69,15 +69,19 @@ const Main = () => {
   useEffect(()=>{
     refInput.current.value = localStorage.getItem('name') ?? ''
     getListNotifications(sortList)
-    if(name && name.length > 0)
-      getResueltos(name,setResueltos)
     const notifications = setInterval(()=>{
       getListNotifications(sortList)
-      if(name && name.length > 0)
-        getResueltos(name,setResueltos)
     },30000)
     return () => clearInterval(notifications)
   },[])
+  useEffect(()=>{
+    getResueltos(name,setResueltos)
+    clearInterval(refTimeout.current)
+    refTimeout.current = setInterval(()=>{
+      if(name && name.length > 0)
+        getResueltos(name,setResueltos)
+    },30000)
+  },[name])
 
   return (
     <Container>
