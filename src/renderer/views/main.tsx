@@ -5,6 +5,8 @@ import 'react-virtualized/styles.css'; // only needs to be imported once
 import Resolved from '../components/resolved'
 import Status from '../components/status'
 import {getListNotifications} from '../../utils/request'
+import {connectAnydesk} from '../../utils/anydesk'
+
 const Container = styled.div`
   width:95%;
   height:100%;
@@ -27,7 +29,15 @@ const NameInput = styled.input`
   background:transparent;
   border-bottom:1px solid white;
 `
-
+const StyledTable = styled(Table)`
+    .ReactVirtualized__Table__row {
+        transition:0.2s background;
+        cursor:pointer;
+        :hover {
+            background: #ffffff22;
+        }
+    }
+`;
 
 const Main = () => {
   const [listNofications,setListNotifications] = useState([])
@@ -67,13 +77,14 @@ const Main = () => {
     </NameContainer>
     <AutoSizer>
                {({ width}) => (
-    <Table
+    <StyledTable
       width={width}
       height={550}
       headerHeight={50}
       headerStyle={{color:"white"}}
       style={{outline:"none"}}
       rowHeight={40}
+      onRowClick={({rowData})=>connectAnydesk(rowData.anydesk,rowData.password)}
       sortBy=""
       rowCount={listNofications.length}
       rowGetter={({index}) => listNofications[index]}>
@@ -81,7 +92,7 @@ const Main = () => {
       <Column label="Pending" style={{color:"#cccccc"}} width={(width - 110)*0.33} dataKey="pending" cellRenderer={({ cellData, rowIndex }) => <Status data={cellData.pending} />} cellDataGetter={({ rowData }) => rowData} />
       <Column label="Date" style={{color:"#cccccc"}} width={(width - 110)*0.33} dataKey="date" cellRenderer={({ cellData, rowIndex }) => new Date(cellData).toLocaleString()} />
       <Column label="Solved" style={{color:"#cccccc"}} width={110} cellRenderer={({ cellData, rowIndex }) => <Resolved data={cellData} name={name} />} cellDataGetter={({ rowData }) => rowData} />
-    </Table>
+    </StyledTable>
   )}
           </AutoSizer>
     </Container>
