@@ -36,7 +36,7 @@ export const solveNotification = (anydesk,agent,fallback) => {
     fallback(body?.data?.data)
   }).catch((e)=>{
     console.log(e)
-    fallback([])
+    fallback(false)
 
   })
 }

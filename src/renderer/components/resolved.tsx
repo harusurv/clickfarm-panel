@@ -24,9 +24,6 @@ const Button = styled.div`
 `
 const Resolved = ({data,name,updateNot}) => {
   const [loading,setLoading] = useState(false)
-  useEffect(()=>{
-    setLoading(false)
-  },[data])
   return (
     <Container>
       <Button disabled={loading || data.pending == 0} onClick={()=>{
