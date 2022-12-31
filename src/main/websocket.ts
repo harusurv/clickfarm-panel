@@ -26,11 +26,11 @@ export const initialize = () => {
             method:"pong"
           }))
         }
-        else if(json.method == "start-rutine"){
+        else if(json.method == "start-rutine-notification"){
           console.log("Start rutine:"+json.params.anydesk)
         }
-        else if(json.method == "stop-rutine"){
-          console.log("Start rutine:"+json.params.anydesk)
+        else if(json.method == "stop-rutine-notification"){
+          console.log("Stop rutine:"+json.params.anydesk)
         }
 
       }
