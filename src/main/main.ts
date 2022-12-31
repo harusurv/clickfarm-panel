@@ -14,6 +14,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import './anydesk'
+import './websocket'
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';

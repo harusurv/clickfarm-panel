@@ -1,7 +1,7 @@
 {
   "name": "ClickfarmPanel",
   "appId": "ClickfarmPanel",
-  "version":"1.0.6",
+  "version":"1.0.7",
   "productName": "ClickfarmPanel",
   "description": "ClickfarmPanel controller",
   "license": "MIT",

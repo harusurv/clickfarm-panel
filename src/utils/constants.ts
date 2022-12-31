@@ -2,7 +2,8 @@ export const NOTIFICATIONS = {
   0:"OK",
   1:"CAPTCHA",
   2:"INITIALIZE",
-  3:"PAUSED"
+  3:"PAUSED",
+  4:"ON RUTINE"
 }
 export const ENDPOINT = "http://54.38.241.30:45200"
 
