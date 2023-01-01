@@ -14,7 +14,9 @@ export const initializeWebsocket = (win) => {
     websocket.on('close',()=>{
       console.log("close connection")
       websocket.connected = false
-      initialize()
+      setTimeout(() => {
+        initializeWebsocket(win)
+      }, 15000);
     })
     websocket.on('error',()=>{
       console.log("close connection")
@@ -37,6 +39,9 @@ export const initializeWebsocket = (win) => {
         }
         else if(json.method == "stop-rutine-notification"){
           mainWindow.webContents.send('stopped-rutine', json.params.anydesk);
+        }
+        else if(json.method == "change-status"){
+          mainWindow.webContents.send('change-status', json.params);
         }
 
       }

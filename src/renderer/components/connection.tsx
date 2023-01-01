@@ -11,13 +11,13 @@ const Container = styled.div`
 const Ball = styled.div`
   width:10px;
   height:10px;
-  background:${props => props.online ? "#00FF00" : "#eeeeee55"};
+  background:${props => props.on_rutine ? "orange" : props.online ? "#00FF00" : "#eeeeee55"};
   border-radius:10px;
 `
-const Resolved = ({data}) => {
+const Resolved = ({data,on_rutine}) => {
   return (
     <Container>
-      <Ball  online={isOnline(data)} />
+      <Ball  online={isOnline(data)} on_rutine={on_rutine} />
     </Container>
   )
 }

@@ -4,10 +4,10 @@ import {NOTIFICATIONS} from '../../utils/constants'
 const Container = styled.div`
 
 `
-const Resolved = ({data}) => {
+const Resolved = ({data,on_rutine}) => {
   return (
     <Container>
-      {NOTIFICATIONS[data]}
+      {on_rutine ? "ON RUTINE" : NOTIFICATIONS[data]}
     </Container>
   )
 }

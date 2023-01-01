@@ -33,6 +33,7 @@ const NameInput = styled.input`
   border-bottom:1px solid white;
 `
 const StyledTable = styled(Table)`
+    outline:none;
     .ReactVirtualized__Table__row {
         transition:0.2s background;
         cursor:pointer;
@@ -51,6 +52,7 @@ const Main = () => {
   const [listNofications,setListNotifications] = useState([])
   const [name,setName] = useState(localStorage.getItem('name') ?? '')
   const [resueltos,setResueltos] = useState("-")
+  const [nameUpdate,setNameUpdate] = useState(new Date().getTime())
   const refTimeout = useRef()
   const refInput = useRef()
   const sortList = (list) => {
@@ -66,14 +68,30 @@ const Main = () => {
       return a.anydesk > b.anydesk ? -1 : 1
     })
     setListNotifications(list)
+    setNameUpdate(new Date().getTime())
   }
+  useEffect(()=>{
+    initializeWebsocket((anydesk,value)=>{
+      const list = listNofications
+      for(let d of list)
+        if(d.anydesk == anydesk)
+          d.on_rutine = value
+      sortList(list)
+    },
+    (anydesk,value)=>{
+      const list = listNofications
+      for(let d of list)
+        if(d.anydesk == anydesk)
+          d.pending = value
+      sortList(list)
+    })
+  },[listNofications])
   useEffect(()=>{
     refInput.current.value = localStorage.getItem('name') ?? ''
     getListNotifications(sortList)
     const notifications = setInterval(()=>{
       getListNotifications(sortList)
     },30000)
-    initializeWebsocket(listNofications,setListNotifications)
     return () => clearInterval(notifications)
   },[])
   useEffect(()=>{
@@ -104,23 +122,28 @@ const Main = () => {
     <StyledTable
       width={width}
       height={550}
+       key={Math.random()}
       headerHeight={50}
       headerStyle={{color:"white"}}
       style={{outline:"none"}}
       rowHeight={40}
-      onRowDoubleClick={({rowData})=>connectAnydesk(rowData.anydesk,rowData.password)}
+      onRowDoubleClick={({rowData})=>{
+        if(rowData.on_rutine == 0)
+          connectAnydesk(rowData.anydesk,rowData.password)
+      }}
       sortBy=""
       rowCount={listNofications.length}
       rowGetter={({index}) => listNofications[index]}>
-      <Column style={{color:"#cccccc"}} dataKey="last_connection" width={20} cellRenderer={({ cellData, rowIndex }) => <Connection data={cellData.last_connection} />} cellDataGetter={({ rowData }) => rowData} />
+      <Column style={{color:"#cccccc"}} dataKey="last_connection" width={20} cellRenderer={({ cellData, rowIndex }) => <Connection data={cellData.last_connection} on_rutine={cellData.on_rutine == 1} />} cellDataGetter={({ rowData }) => rowData} />
       <Column label="Anydesk" style={{color:"#cccccc"}} dataKey="anydesk" width={100} />
       <Column label="Email" style={{color:"#cccccc"}} dataKey="email" width={(width - 570)} />
       <Column label="Pending" style={{color:"#cccccc"}} width={120} dataKey="pending" cellRenderer={({ cellData, rowIndex }) => <Status data={cellData.pending} />} cellDataGetter={({ rowData }) => rowData} />
       <Column label="Date" style={{color:"#cccccc"}} width={220} dataKey="date" cellRenderer={({ cellData, rowIndex }) => new Date(cellData).toLocaleString()} />
-      <Column label="Solved" style={{color:"#cccccc"}} width={110} cellRenderer={({ cellData, rowIndex }) => <Resolved updateNot={()=>getListNotifications(sortList)} data={cellData} name={name} />} cellDataGetter={({ rowData }) => rowData} />
+      <Column label="Solved" style={{color:"#cccccc"}} width={110} cellRenderer={({ cellData, rowIndex }) => <Resolved updateNot={()=>getListNotifications(sortList)} on_rutine={cellData.on_rutine == 1} data={cellData} name={name} />} cellDataGetter={({ rowData }) => rowData} />
     </StyledTable>
   )}
           </AutoSizer>
+          <div style={{display:"none"}}>{nameUpdate}</div>
     </Container>
   )
 }

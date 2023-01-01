@@ -22,18 +22,18 @@ const Button = styled.div`
   }
 
 `
-const Resolved = ({data,name,updateNot}) => {
+const Resolved = ({data,name,updateNot,on_rutine}) => {
   const [loading,setLoading] = useState(false)
   return (
     <Container>
-      <Button disabled={loading || data.pending == 0} onClick={()=>{
+      <Button disabled={loading || data.pending == 0 || on_rutine} onClick={()=>{
         setLoading(true)
         solveNotification(data.anydesk,name,(rt)=>{
           data.pending = rt ? 0 : data.pending
           updateNot()
           setLoading(false)
         })
-      }}>{data.pending == 0 ? "Ok" : loading ? "Checking" : "Solve"}</Button>
+      }}>{on_rutine ? "On rutine" : data.pending == 0 ? "Ok" : loading ? "Checking" : "Solve"}</Button>
     </Container>
   )
 }

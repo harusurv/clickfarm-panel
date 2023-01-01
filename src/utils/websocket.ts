@@ -1,15 +1,19 @@
 
-export const initializeWebsocket = (nots,setList) => {
-  window.electron.ipcRenderer.on('started-rutine',(event,anydesk)=>{
-    for(let a of nots){
-      if(a.anydesk == anydesk)
-        a.on_rutine = 1
-    }
-  })
-  window.electron.ipcRenderer.on('stopped-rutine',(event,anydesk)=>{
-    for(let a of nots){
-      if(a.anydesk == anydesk)
-        a.on_rutine = 0
-    }
-  })
+export const initializeWebsocket = (setList,setStatus) => {
+  const eventAdd = (anydesk)=>{
+    setList(anydesk,1)
+  }
+  const eventRemove = (anydesk)=>{
+    setList(anydesk,0)
+  }
+  const changeStatus = ({anydesk,status}) => {
+    setStatus(anydesk,status)
+  }
+  window.electron.ipcRenderer.removeAllListeners('started-rutine')
+  window.electron.ipcRenderer.on('started-rutine',eventAdd)
+  window.electron.ipcRenderer.removeAllListeners('stopped-rutine')
+  window.electron.ipcRenderer.on('stopped-rutine',eventRemove)
+  window.electron.ipcRenderer.removeAllListeners('change-status')
+  window.electron.ipcRenderer.on('change-status',changeStatus)
+
 }
