@@ -7,6 +7,7 @@ import Status from '../components/status'
 import {getListNotifications,getResueltos} from '../../utils/request'
 import {connectAnydesk} from '../../utils/anydesk'
 import {isOnline} from '../../utils/utils'
+import {initializeWebsocket} from '../../utils/websocket'
 
 import Connection from '../components/connection'
 const Container = styled.div`
@@ -72,6 +73,7 @@ const Main = () => {
     const notifications = setInterval(()=>{
       getListNotifications(sortList)
     },30000)
+    initializeWebsocket(listNofications,setListNotifications)
     return () => clearInterval(notifications)
   },[])
   useEffect(()=>{

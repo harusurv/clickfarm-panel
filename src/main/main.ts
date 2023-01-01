@@ -14,7 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import './anydesk'
-import './websocket'
+import {initializeWebsocket} from './websocket'
 
 class AppUpdater {
   constructor() {
@@ -99,6 +99,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+    initializeWebsocket(mainWindow)
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {

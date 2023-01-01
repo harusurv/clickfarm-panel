@@ -4,11 +4,16 @@ import {ENDPOINT,MAGIC_COOKIE_WEBSOCKET} from '../utils/constants'
 import crypto from "crypto"
 
 let websocket
-export const initialize = () => {
+let mainWindow
+export const initializeWebsocket = (win) => {
+  mainWindow = win
+  if(websocket?.connected)
+    return;
   try{
     websocket = new WebSocket((ENDPOINT+"/websocket").replace('http','ws'))
     websocket.on('close',()=>{
       console.log("close connection")
+      websocket.connected = false
       initialize()
     })
     websocket.on('error',()=>{
@@ -17,6 +22,7 @@ export const initialize = () => {
     })
     websocket.on('open',()=>{
       console.log("connection open")
+      websocket.connected = true
     })
     websocket.on('message',async (message) => {
       try{
@@ -27,10 +33,10 @@ export const initialize = () => {
           }))
         }
         else if(json.method == "start-rutine-notification"){
-          console.log("Start rutine:"+json.params.anydesk)
+          mainWindow.webContents.send('started-rutine', json.params.anydesk);
         }
         else if(json.method == "stop-rutine-notification"){
-          console.log("Stop rutine:"+json.params.anydesk)
+          mainWindow.webContents.send('stopped-rutine', json.params.anydesk);
         }
 
       }
@@ -48,5 +54,3 @@ export const initialize = () => {
 
 
 }
-
-initialize()
